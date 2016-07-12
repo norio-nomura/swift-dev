@@ -1,0 +1,54 @@
+FROM ubuntu:15.10
+MAINTAINER Norio Nomura <norio.nomura@gmail.com>
+
+# Install Dependencies
+
+RUN apt-get update && \
+    apt-get install -y \
+      autoconf \
+      clang \
+      cmake \
+      git \
+      icu-devtools \
+      libblocksruntime-dev \
+      libbsd-dev \
+      libedit-dev \
+      libicu-dev \
+      libkqueue-dev \
+      libncurses5-dev \
+      libpython-dev \
+      libsqlite3-dev \
+      libtool \
+      libxml2-dev \
+      ninja-build \
+      pkg-config \
+      python \
+      swig \
+      uuid-dev \
+      && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Clone & Check Out
+
+RUN git clone https://github.com/norio-nomura/swift-dev.git
+WORKDIR swift-dev
+
+# Using commit hash will avoid caching by branch name.
+ENV COMMIT=4436d13
+RUN git fetch && \
+    git checkout ${COMMIT} && \
+    git submodule update --init --recursive
+
+# Build Swift With libdispatch
+
+RUN swift/utils/build-script --preset="buildbot_linux_libdispatch"
+
+# Build Normal Swift Toolchain & SourceKit
+
+RUN swift/utils/build-toolchain local.swift
+
+# Set Environment Variables
+
+ENV PATH="/swift-dev/build/buildbot_linux/none-swift_package_sandbox_linux-x86_64/usr/bin:$PATH"
+ENV LINUX_SOURCEKIT_LIB_PATH="/swift-dev/build/buildbot_linux/swift-linux-x86_64/lib"
