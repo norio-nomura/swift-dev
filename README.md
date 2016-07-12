@@ -1,8 +1,38 @@
-# Swift environments for building SourceKitten on Linux
+# Swift build environments for building SourceKitten on Linux
 
-## Build SourceKit in Docker Container
+## What is this
+A Swift build environments for building [SourceKitten on Linux](https://github.com/jpsim/SourceKitten/pull/223).  
+[SourceKitten on Linux](https://github.com/jpsim/SourceKitten/pull/223) depends on SourceKit in the Swift Toolchain.  
+But official distribution of Swift for Linux does not contain SourceKit yet.   
+This repository provides simple building methods of Swift for Linux including SourceKit.  
+
+## Submodules
+It contains Swift repositories as submodules. Each submodules are basically pointing commits tagged by `swift-3.0-PREVIEW-2`.  
+Except for:
+- `swift` points [my fork](https://github.com/norio-nomura/swift/tree/sourcekit-linux-preview-2)   
+  - Cherry picked commits from [SR-1676](https://bugs.swift.org/browse/SR-1676)
+  - Skip some test on building toolchain that passed on official build of `swift-3.0-PREVIEW-2`.
+- `swift-corelibs-libdispatch` points [my fork](https://github.com/norio-nomura/swift-corelibs-libdispatch/tree/sourcekit-linux-preview-2)
+  - Based on [`experimental/foundation` branch](https://github.com/apple/swift-corelibs-libdispatch/tree/experimental/foundation)
+  - Disabled some failing tests
+
+## How to build
+This repository provides two methods for easily building Swift and SourceKitten.
+
+- Build in the Docker Container
+- Build in the Docker Container placing source into Shared Volume of the OS X Host
+
+### Requirements
+- Docker
+
+### Build in the Docker Container
+Build `sourcekit` image:
 ```sh
-$ docker build -f Dockerfile-build-SourceKit-in-container -t sourcekit .
+$ curl https://raw.githubusercontent.com/norio-nomura/swift-dev/sourcekit-linux/Dockerfile-build-SourceKit-in-container | docker build -t sourcekit -
+```
+
+Build `SourceKitten` using the image
+```sh
 $ docker run -it sourcekit bash
 > $ git clone https://github.com/jpsim/SourceKitten.git /SourceKitten
 > $ cd /SourceKitten
@@ -11,12 +41,22 @@ $ docker run -it sourcekit bash
 > $ swift test
 ```
 
-## Build SourceKitten using Shared Volume of Docker
+## Build in the Docker Container placing source into Shared Volume of the OS X Host
+Prepare repository:
+```sh
+$ git clone https://github.com/norio-nomura/swift-dev.git
+$ cd swift-dev
+$ git checkout sourcekit-linux
+$ git submodule update --init --recursive
+```
+
+Build `sourcekit` and `SourceKitten`:
 ```sh
 $ build-SourceKitten-in-shared-volume.sh
 ```
 
-**Docker for Mac has issue on using shared volume that causes build error and stop.** See [Setup docker-machine](#setup-docker-machine-on-os-x).
+**Docker for Mac has issue on using shared volume that causes error or stop on building Swift.**  
+See [Setup docker-machine](#setup-docker-machine-on-os-x).
 
 ## Setup `docker-machine` on OS X
 For avoiding issues of shared volume. I recommend to use NFS.
