@@ -40,3 +40,6 @@
 [submodule "swift"]
 	path = swift
 	url = https://github.com/norio-nomura/swift.git
+[submodule "SourceKitten"]
+	path = SourceKitten
+	url = https://github.com/jpsim/SourceKitten.git
