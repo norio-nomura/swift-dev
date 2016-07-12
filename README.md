@@ -16,7 +16,7 @@ $ docker run -it sourcekit bash
 $ build-SourceKitten-in-shared-volume.sh
 ```
 
-**Docker for Mac has issue on using shared volume that causes build error and stop.** See [Setup docker-machine](#setup--code-docker-machine--code--on-os-x).
+**Docker for Mac has issue on using shared volume that causes build error and stop.** See [Setup docker-machine](#setup-docker-machine-on-os-x).
 
 ## Setup `docker-machine` on OS X
 For avoiding issues of shared volume. I recommend to use NFS.
