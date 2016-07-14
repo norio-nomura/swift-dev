@@ -52,7 +52,7 @@ $ git submodule update --init --recursive
 
 Build `sourcekit` and `SourceKitten`:
 ```sh
-$ build-SourceKitten-in-shared-volume.sh
+$ ./build-SourceKitten-in-shared-volume.sh
 ```
 
 **Docker for Mac has issue on using shared volume that causes error or stop on building Swift.**  
