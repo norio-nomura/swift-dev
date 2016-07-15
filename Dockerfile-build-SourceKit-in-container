@@ -29,26 +29,45 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Clone & Check Out
+# Setup Environment Variables
 
-RUN git clone https://github.com/norio-nomura/swift-dev.git
-WORKDIR swift-dev
+ENV COMMIT="54e6594" \
+    OUTPUT_DIR="/swift" \
+    WORK_DIR="/swift-dev"
+
+ENV SRC_DIR=${WORK_DIR}/swift \
+    TOOLCHAIN_VERSION="swift-3.0-PREVIEW-2-${COMMIT}-with-sourcekit"
+ENV ARCHIVE="${TOOLCHAIN_VERSION}.tar.gz"
+ENV SWIFT_INSTALL_DIR="${SRC_DIR}/swift-nightly-install" \
+    SWIFT_INSTALLABLE_PACKAGE="${OUTPUT_DIR}/${ARCHIVE}"
+
+# Make ${OUTPUT_DIR}
+RUN mkdir -p ${OUTPUT_DIR}
+
+# Clone & Check Out to ${WORK_DIR}
+RUN git clone https://github.com/norio-nomura/swift-dev.git && \
 
 # Using commit hash will avoid caching by branch name.
-ENV COMMIT=4436d13
-RUN git fetch && \
+    cd ${WORK_DIR} && \
+    git fetch && \
     git checkout ${COMMIT} && \
-    git submodule update --init --recursive
+    git submodule update --init --recursive && \
 
-# Build Swift With libdispatch
+# Build Swift installer package at ${SWIFT_INSTALLABLE_PACKAGE}
+    cd ${SRC_DIR} && \
+    utils/build-script --preset="buildbot_linux_libdispatch" \
+      install_destdir="${SWIFT_INSTALL_DIR}" && \
+    utils/build-script --preset="buildbot_linux" \
+      install_destdir="${SWIFT_INSTALL_DIR}" \
+      installable_package="${SWIFT_INSTALLABLE_PACKAGE}" && \
 
-RUN swift/utils/build-script --preset="buildbot_linux_libdispatch"
+# Install ${SWIFT_INSTALLABLE_PACKAGE} and remove ${WORK_DIR}
+    cd / && \
+    tar zxvf "${SWIFT_INSTALLABLE_PACKAGE}" -C / && \
+    rm -rf ${WORK_DIR}
 
-# Build Normal Swift Toolchain & SourceKit
-
-RUN swift/utils/build-toolchain local.swift
-
-# Set Environment Variables
-
-ENV PATH="/swift-dev/build/buildbot_linux/none-swift_package_sandbox_linux-x86_64/usr/bin:$PATH"
-ENV LINUX_SOURCEKIT_LIB_PATH="/swift-dev/build/buildbot_linux/swift-linux-x86_64/lib"
+# Output ${OUTPUT_DIR} as build context
+COPY Dockerfile-swift-15.10 ${OUTPUT_DIR}/Dockerfile
+RUN echo "ADD ${ARCHIVE} /">>${OUTPUT_DIR}/Dockerfile
+WORKDIR ${OUTPUT_DIR}
+CMD tar -cf - .
