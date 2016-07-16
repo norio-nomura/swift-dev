@@ -43,3 +43,6 @@
 [submodule "SourceKitten"]
 	path = SourceKitten
 	url = https://github.com/jpsim/SourceKitten.git
+[submodule "sourcekit-builder"]
+	path = sourcekit-builder
+	url = https://github.com/norio-nomura/docker-sourcekit-builder.git
