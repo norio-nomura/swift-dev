@@ -20,20 +20,23 @@ Except for:
 This repository provides two methods for easily building Swift and SourceKitten.
 
 - Build in the Docker Container
-- Build in the Docker Container placing source into Shared Volume of the OS X Host
+- Build in the Docker Container placing source into Shared Volume
 
 ### Requirements
 - Docker
 
 ### Build in the Docker Container
-Build `sourcekit` image:
+Build `sourcekit:30p2` image:
 ```sh
-$ curl https://raw.githubusercontent.com/norio-nomura/swift-dev/sourcekit-linux/Dockerfile-build-SourceKit-in-container | docker build -t sourcekit -
+# Build `sourcekit-builder` image
+$ curl https://raw.githubusercontent.com/norio-nomura/swift-dev/sourcekit-linux/Dockerfile-sourcekit-builder | docker build -t sourcekit-builder -
+# Build `sourcekit` image using context created by `sourcekit-builder`
+$ docker run --rm sourcekit-builder | docker build -t sourcekit:30p2 -
 ```
 
-Build `SourceKitten` using the image
+Build `SourceKitten` using `sourcekit:30p2` image
 ```sh
-$ docker run -it sourcekit bash
+$ docker run -it sourcekit:30p2 bash
 > $ git clone https://github.com/jpsim/SourceKitten.git /SourceKitten
 > $ cd /SourceKitten
 > $ git checkout jp-wip-linux
@@ -41,7 +44,7 @@ $ docker run -it sourcekit bash
 > $ swift test
 ```
 
-## Build in the Docker Container placing source into Shared Volume of the OS X Host
+## Build in the Docker Container placing source into Shared Volume for workflow on tweaking Swift build
 Prepare repository:
 ```sh
 $ git clone https://github.com/norio-nomura/swift-dev.git
@@ -50,7 +53,7 @@ $ git checkout sourcekit-linux
 $ git submodule update --init --recursive
 ```
 
-Build `sourcekit` and `SourceKitten`:
+Build `sourcekit:sv` image and `SourceKitten`:
 ```sh
 $ ./build-SourceKitten-in-shared-volume.sh
 ```

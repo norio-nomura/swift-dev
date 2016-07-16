@@ -12,7 +12,7 @@ docker build -q -f Dockerfile-${BASE_IMAGE} -t ${BASE_IMAGE} .
 WORK_DIR="`pwd`"
 DOCKER_RUN_OPTIONS="-it -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR} --rm"
 
-SOURCEKIT_IMAGE="sourcekit:30p2"
+SOURCEKIT_IMAGE="sourcekit:sv"
 REVISION="`git rev-parse --short HEAD|tr -d '\n'`"
 
 if [ -z "`docker images -q ${SOURCEKIT_IMAGE}|tr -d '\n'`" ]; then
