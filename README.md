@@ -3,7 +3,7 @@
 ## What is this
 [SourceKitten on Linux](https://github.com/jpsim/SourceKitten/pull/223) depends on SourceKit in the Swift Toolchain.  
 But official distribution of Swift Toolchain for Linux does not have SourceKit yet.   
-This repository provides docker images containing Swift Toolchain for Linux with SourceKit.  
+This repository provides building method of docker images containing Swift Toolchain for Linux with SourceKit.  
 
 ## Base version of Swift is 3.0 Preview 2
 It contains Swift repositories as submodules. Each submodules are basically pointing commits tagged by `swift-3.0-PREVIEW-2`.  
@@ -15,14 +15,14 @@ Except for:
   - Based on [`experimental/foundation` branch](https://github.com/apple/swift-corelibs-libdispatch/tree/experimental/foundation)
   - Disabled some failing tests
 
-## How to build the image
+## How to build images
 This repository provides two methods for building Docker images
 
-- **[recommended]** Build `sourcekit-builder` and `sourcekit` images
+- **[recommended]** Build `sourcekit-builder` and `sourcekit:30p2` images
 - Build in the Docker Container placing source into Shared Volume  
   This method is intended to using workflow on tweaking Swift build.
 
-### Build `sourcekit-builder` and `sourcekit` images
+### Build `sourcekit-builder` and `sourcekit:30p2` images
 ```sh
 # Build `sourcekit-builder` image
 $ curl https://raw.githubusercontent.com/norio-nomura/swift-dev/sourcekit-linux/Dockerfile-sourcekit-builder | docker build -t sourcekit-builder -
