@@ -31,7 +31,7 @@ RUN apt-get update && \
 
 # Setup Environment Variables
 
-ENV COMMIT="54e6594" \
+ENV COMMIT="f5c21a5" \
     OUTPUT_DIR="/swift" \
     WORK_DIR="/swift-dev"
 
