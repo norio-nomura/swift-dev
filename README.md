@@ -23,9 +23,16 @@ This repository provides two methods for building Docker images
   This method is intended to using workflow on tweaking Swift build.
 
 ### Build `sourcekit-builder` and `sourcekit:30p2` images
+Prepare repository:
+```sh
+$ git clone https://github.com/norio-nomura/swift-dev.git
+$ cd swift-dev
+$ git checkout sourcekit-linux
+```
+Build:
 ```sh
 # Build `sourcekit-builder` image
-$ curl https://raw.githubusercontent.com/norio-nomura/swift-dev/sourcekit-linux/Dockerfile-sourcekit-builder | docker build -t sourcekit-builder -
+$ docker build -f Dockerfile-sourcekit-builder -t sourcekit-builder .
 # Build `sourcekit` image using context created by `sourcekit-builder`
 $ docker run --rm sourcekit-builder | docker build -t sourcekit:30p2 -
 ```
