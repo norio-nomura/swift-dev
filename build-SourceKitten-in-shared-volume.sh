@@ -40,6 +40,7 @@ if [ -z "`docker images -q ${SOURCEKIT_IMAGE}|tr -d '\n'`" ]; then
   cat <<-EOF >${DOCKER_BUILD_DIR}/Dockerfile
   FROM ${BASE_IMAGE}
   ADD ${ARCHIVE} /
+  ENV LD_LIBRARY_PATH /usr/lib/swift/linux/:\${LD_LIBRARY_PATH}
 EOF
   docker build -t ${SOURCEKIT_IMAGE} ${DOCKER_BUILD_DIR} || exit 1
 

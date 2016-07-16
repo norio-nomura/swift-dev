@@ -68,6 +68,6 @@ RUN git clone https://github.com/norio-nomura/swift-dev.git && \
 
 # Output ${OUTPUT_DIR} as build context
 COPY Dockerfile-swift-15.10 ${OUTPUT_DIR}/Dockerfile
-RUN echo "ADD ${ARCHIVE} /">>${OUTPUT_DIR}/Dockerfile
+RUN echo "ADD ${ARCHIVE} /\nENV LD_LIBRARY_PATH /usr/lib/swift/linux/:\${LD_LIBRARY_PATH}\n">>${OUTPUT_DIR}/Dockerfile
 WORKDIR ${OUTPUT_DIR}
 CMD tar -cf - .
