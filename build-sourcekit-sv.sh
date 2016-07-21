@@ -35,7 +35,7 @@ if [ -z "`docker images -q ${SOURCEKIT_IMAGE}|tr -d '\n'`" ]; then
 
   # Build ${BASE_IMAGE}
   BASE_IMAGE="swift-base-15.10"
-  docker build -f Dockerfile-swift-15 -t ${BASE_IMAGE} . || exit 1
+  docker build -f sourcekit-builder/Dockerfile-swift-15.10 -t ${BASE_IMAGE} . || exit 1
 
   # Build ${SOURCEKIT_IMAGE}
   DOCKER_BUILD_DIR="${TMPDIR}$(basename $0)"
