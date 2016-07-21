@@ -17,7 +17,7 @@ SOURCEKIT_IMAGE="sourcekit:sv"
 if [ -z "`docker images -q ${SOURCEKIT_IMAGE}|tr -d '\n'`" ]; then
   REVISION="`git rev-parse --short HEAD|tr -d '\n'`"
   SRC_DIR=${WORK_DIR}/swift
-  TOOLCHAIN_VERSION="swift-3.0-PREVIEW-2-${REVISION}-with-sourcekit"
+  TOOLCHAIN_VERSION="swift-3.0-PREVIEW-3-${REVISION}-with-sourcekit"
   ARCHIVE="${TOOLCHAIN_VERSION}.tar.gz"
   SWIFT_INSTALLABLE_PACKAGE="${SRC_DIR}/${ARCHIVE}"
   SWIFT_INSTALL_DIR="${WORK_DIR}/build/swift-nightly-install"
