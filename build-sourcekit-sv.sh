@@ -25,14 +25,14 @@ if [ -z "`docker images -q ${SOURCEKIT_IMAGE}|tr -d '\n'`" ]; then
   # Build Swift With libdispatch
   docker run ${DOCKER_RUN_OPTIONS} ${BUILD_BASE_IMAGE} \
     swift/utils/build-script \
-      --preset-file="build-presets-for-sourcekit-linux.ini" \
+      --preset-file="${WORK_DIR}/build-presets-for-sourcekit-linux.ini" \
       --preset="buildbot_linux_libdispatch" \
       install_destdir="${SWIFT_INSTALL_DIR}" || exit 1
 
   # Build Normal Swift Toolchain & SourceKit
   docker run ${DOCKER_RUN_OPTIONS} ${BUILD_BASE_IMAGE} \
     swift/utils/build-script \
-      --preset-file="build-presets-for-sourcekit-linux.ini" \
+      --preset-file="${WORK_DIR}/build-presets-for-sourcekit-linux.ini" \
       --preset="buildbot_linux" \
       -- \
       --extra-cmake-options="-DSWIFT_BUILD_SOURCEKIT:BOOL=TRUE" \
