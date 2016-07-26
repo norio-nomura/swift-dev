@@ -5,36 +5,30 @@
 But official distribution of Swift Toolchain for Linux does not have SourceKit yet.   
 This repository provides building method of docker images containing Swift Toolchain for Linux with SourceKit.  
 
-## Base version of Swift is 3.0 Preview 3
-It contains Swift repositories as submodules. Each submodules are basically pointing commits tagged by `swift-3.0-preview-3-branch`. (Official release has not yet come.)  
+## Base version of Swift is `swift-DEVELOPMENT-SNAPSHOT-2016-07-25-a`
+It contains Swift repositories as submodules. Each submodules are basically pointing commits tagged by `swift-DEVELOPMENT-SNAPSHOT-2016-07-25-a`.
 Except for:
-- `swift` points [my fork](https://github.com/norio-nomura/swift/tree/sourcekit-linux-preview-3)   
-  - Cherry picked commits from [SR-1676](https://bugs.swift.org/browse/SR-1676)
-  - Skip some test on building toolchain that passed on official build of `swift-3.0-PREVIEW-3`.
-  - Add workarounds for link errors
-- `swift-corelibs-libdispatch` points [my fork](https://github.com/norio-nomura/swift-corelibs-libdispatch/tree/sourcekit-linux-preview-3)
-  - Based on [`swift-3.0-preview-3-branch`](https://github.com/apple/swift-corelibs-libdispatch/tree/swift-3.0-preview-3-branch)
+- `swift-corelibs-libdispatch` points [my fork](https://github.com/norio-nomura/swift-corelibs-libdispatch/tree/sourcekit-linux-snapshot-2016-07-25)
+  - Based on [`swift-3.0-preview-5-speculative`](https://github.com/apple/swift-corelibs-libdispatch/tree/swift-3.0-preview-5-speculative)
+  - Merged https://github.com/apple/swift-corelibs-libdispatch/pull/116
   - Disabled some failing tests
-- `swift-corelibs-foundation` points [my fork](https://github.com/norio-nomura/swift-corelibs-foundation/tree/sourcekit-linux-preview-3)
-  - Based on [`swift-3.0-preview-3-branch`](https://github.com/apple/swift-corelibs-foundation/tree/swift-3.0-preview-3-branch)
-  - Cherry picked some commits
-- `swiftpm` points [my fork](https://github.com/norio-nomura/swift-package-manager/tree/sourcekit-linux-preview-3)
-  - Based on [`swift-3.0-preview-3-branch`](https://github.com/apple/swift-package-manager/tree/swift-3.0-preview-3-branch)
+- `swiftpm` points [my fork](https://github.com/norio-nomura/swift-package-manager/tree/sourcekit-linux-snapshot-2016-07-25)
+  - Based on [`swift-DEVELOPMENT-SNAPSHOT-2016-07-25-a`](https://github.com/apple/swift-package-manager/tree/swift-DEVELOPMENT-SNAPSHOT-2016-07-25-a)
   - Add workaround for https://github.com/apple/swift-corelibs-libdispatch/pull/94
 
 ## How to build images
 This repository provides two methods for building Docker images
 
-- **[recommended]** Build `sourcekit-builder` and `sourcekit:30p3` images
+- **[recommended]** Build `sourcekit-builder` and `sourcekit:3020160725a` images
 - Build in the Docker Container placing source into Shared Volume  
   This method is intended to using workflow on tweaking Swift build.
 
-### Build `sourcekit-builder` and `sourcekit:30p3` images
+### Build `sourcekit-builder` and `sourcekit:3020160725a` images
 ```sh
 # Build `sourcekit-builder` image
-$ docker build -t sourcekit-builder https://github.com/norio-nomura/docker-sourcekit-builder.git
+$ docker build -t sourcekit-builder:3020160725a https://github.com/norio-nomura/docker-sourcekit-builder.git
 # Build `sourcekit` image using context created by `sourcekit-builder`
-$ docker run --rm sourcekit-builder context | docker build -t sourcekit:30p3 -
+$ docker run --rm sourcekit-builder:3020160725a context | docker build -t sourcekit:3020160725a -
 ```
 
 ### Build in the Docker Container placing source into Shared Volume
@@ -55,9 +49,9 @@ $ ./build-sourcekit-sv.sh
 **Docker for Mac has some issues on using shared volume that causes errors or stop on building Swift.**  
 See [Setup `docker-machine` on Mac](docker-machine-on-mac.md).
 
-## Build `SourceKitten` using `sourcekit:30p3` image
+## Build `SourceKitten` using `sourcekit:3020160725a` image
 ```sh
-$ docker run -it -v `pwd`:`pwd` -w `pwd`/SourceKitten sourcekit:30p3 bash
+$ docker run -it -v `pwd`:`pwd` -w `pwd`/SourceKitten sourcekit:3020160725a bash
 > $ swift build
 > $ swift test
 ```
