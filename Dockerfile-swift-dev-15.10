@@ -24,6 +24,7 @@ RUN apt-get update && \
       pkg-config \
       python \
       swig \
+      systemtap-sdt-dev \
       uuid-dev \
       && \
     apt-get clean && \
