@@ -4,10 +4,16 @@ cd "$(dirname $0)/." || exit
 
 # docker-machine start default && eval $(docker-machine env default)
 
-BUILD_BASE_IMAGE="swift-dev-15.10"
+UBUNTU_VERSION="${1:-14.04}"
+BUILD_BASE_IMAGE="swift-dev:${UBUNTU_VERSION}"
+BUILD_BASE_IMAGE_DOCKERFILE="Dockerfile-swift-dev-${UBUNTU_VERSION}"
+if [ ! -f "${BUILD_BASE_IMAGE_DOCKERFILE}" ]; then
+  echo "${BUILD_BASE_IMAGE_DOCKERFILE} does not exist!"
+  exit 1
+fi
 
 # swift build environments
-docker build -f Dockerfile-${BUILD_BASE_IMAGE} -t ${BUILD_BASE_IMAGE} .
+docker build -f ${BUILD_BASE_IMAGE_DOCKERFILE} -t ${BUILD_BASE_IMAGE} . || exit 1
 
 WORK_DIR="`pwd`"
 DOCKER_RUN_OPTIONS="-it -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR} --rm"
@@ -41,8 +47,9 @@ fi
 
 if [ -z "`docker images -q ${SOURCEKIT_IMAGE}|tr -d '\n'`" ]; then
   # Build ${BASE_IMAGE}
-  BASE_IMAGE="swift-base-15.10"
-  docker build -f sourcekit-builder/Dockerfile-swift-15.10 -t ${BASE_IMAGE} . || exit 1
+  BASE_IMAGE="swift-base:${UBUNTU_VERSION}"
+  BASE_IMAGE_DOCKERFILE="sourcekit-builder/Dockerfile-swift-${UBUNTU_VERSION}"
+  docker build -f ${BASE_IMAGE_DOCKERFILE} -t ${BASE_IMAGE} . || exit 1
 
   # Build ${SOURCEKIT_IMAGE}
   DOCKER_BUILD_DIR="${TMPDIR}$(basename $0)"
