@@ -7,21 +7,20 @@ cd "$(dirname $0)/." || exit
 BUILD_BASE_IMAGE="swift-dev-15.10"
 
 # swift build environments
-docker build -q -f Dockerfile-${BUILD_BASE_IMAGE} -t ${BUILD_BASE_IMAGE} .
+docker build -f Dockerfile-${BUILD_BASE_IMAGE} -t ${BUILD_BASE_IMAGE} .
 
 WORK_DIR="`pwd`"
 DOCKER_RUN_OPTIONS="-it -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR} --rm"
 
 SOURCEKIT_IMAGE="sourcekit:sv"
+REVISION="`git rev-parse --short HEAD|tr -d '\n'`"
+SRC_DIR=${WORK_DIR}/swift
+TOOLCHAIN_VERSION="swift-DEVELOPMENT-SNAPSHOT-2016-07-28-a-${REVISION}-with-sourcekit"
+ARCHIVE="${TOOLCHAIN_VERSION}.tar.gz"
+SWIFT_INSTALLABLE_PACKAGE="${WORK_DIR}/build/${ARCHIVE}"
+SWIFT_INSTALL_DIR="${WORK_DIR}/build/swift-nightly-install"
 
-if [ -z "`docker images -q ${SOURCEKIT_IMAGE}|tr -d '\n'`" ]; then
-  REVISION="`git rev-parse --short HEAD|tr -d '\n'`"
-  SRC_DIR=${WORK_DIR}/swift
-  TOOLCHAIN_VERSION="swift-DEVELOPMENT-SNAPSHOT-2016-07-28-a-${REVISION}-with-sourcekit"
-  ARCHIVE="${TOOLCHAIN_VERSION}.tar.gz"
-  SWIFT_INSTALLABLE_PACKAGE="${WORK_DIR}/build/${ARCHIVE}"
-  SWIFT_INSTALL_DIR="${WORK_DIR}/build/swift-nightly-install"
-
+if [ ! -f "${SWIFT_INSTALLABLE_PACKAGE}" ]; then
   # Build Swift With libdispatch
   docker run ${DOCKER_RUN_OPTIONS} ${BUILD_BASE_IMAGE} \
     swift/utils/build-script \
@@ -38,7 +37,9 @@ if [ -z "`docker images -q ${SOURCEKIT_IMAGE}|tr -d '\n'`" ]; then
       --extra-cmake-options="-DSWIFT_BUILD_SOURCEKIT:BOOL=TRUE" \
       install_destdir="${SWIFT_INSTALL_DIR}" \
       installable_package="${SWIFT_INSTALLABLE_PACKAGE}" || exit 1
+fi
 
+if [ -z "`docker images -q ${SOURCEKIT_IMAGE}|tr -d '\n'`" ]; then
   # Build ${BASE_IMAGE}
   BASE_IMAGE="swift-base-15.10"
   docker build -f sourcekit-builder/Dockerfile-swift-15.10 -t ${BASE_IMAGE} . || exit 1
