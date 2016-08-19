@@ -44,3 +44,6 @@ RUN export CMAKE_VERSION="3.6.1" && \
     make install && \
     cd .. && \
     rm -rf cmake-${CMAKE_VERSION}
+
+RUN groupadd -r swift-dev && useradd -r -g swift-dev swift-dev
+USER swift-dev

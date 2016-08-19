@@ -30,3 +30,6 @@ RUN apt-get update && \
       && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN groupadd -r swift-dev && useradd -r -g swift-dev swift-dev
+USER swift-dev
