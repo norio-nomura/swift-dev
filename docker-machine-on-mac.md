@@ -15,7 +15,7 @@ Following is my `docker-machine` setup for VMware Fusion driver.
 
 3. Write `/var/lib/boot2docker/bootlocal.sh` to boot2docker
   ```console
-  $ docker-machine ssh default 'echo "                                                                                                                   ~/github/swift-dev
+  $ docker-machine ssh default 'echo "
   #!/bin/sh
   /usr/local/etc/init.d/nfs-client start
   /bin/mkdir /Users
