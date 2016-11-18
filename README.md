@@ -1,7 +1,7 @@
-# Docker images for building [SourceKitten on Linux](https://github.com/jpsim/SourceKitten/pull/223)
+# Docker images for building [SourceKitten on Linux](https://github.com/jpsim/SourceKitten/)
 
 ## What is this
-[SourceKitten on Linux](https://github.com/jpsim/SourceKitten/pull/223) depends on SourceKit in the Swift Toolchain.  
+[SourceKitten on Linux](https://github.com/jpsim/SourceKitten/) depends on SourceKit in the Swift Toolchain.  
 But official distribution of Swift Toolchain for Linux does not have SourceKit yet.   
 This repository provides building method of docker images containing Swift Toolchain for Linux with SourceKit.  
 
