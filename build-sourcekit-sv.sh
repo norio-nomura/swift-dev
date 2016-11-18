@@ -4,7 +4,7 @@ cd "$(dirname $0)/." || exit
 
 # docker-machine start default && eval $(docker-machine env default)
 
-UBUNTU_VERSION="${1:-14.04}"
+UBUNTU_VERSION="${1:-16.04}"
 BUILD_BASE_IMAGE="swift-dev:${UBUNTU_VERSION}"
 BUILD_BASE_IMAGE_DOCKERFILE="Dockerfile-swift-dev-${UBUNTU_VERSION}"
 if [ ! -f "${BUILD_BASE_IMAGE_DOCKERFILE}" ]; then
