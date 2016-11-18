@@ -5,22 +5,22 @@
 But official distribution of Swift Toolchain for Linux does not have SourceKit yet.   
 This repository provides building method of docker images containing Swift Toolchain for Linux with SourceKit.  
 
-## Base version of Swift is `swift-3.0.1-RELEASE`
-It contains Swift repositories as submodules. Each submodules are basically pointing commits tagged by `swift-3.0.1-RELEASE`.
+## Base version of Swift is `swift-3.0.2-PREVIEW-1`
+It contains Swift repositories as submodules. Each submodules are basically pointing commits tagged by `swift-3.0.2-PREVIEW-1`.
 
 ## How to build images
 This repository provides two methods for building Docker images
 
-- **[recommended]** Build `sourcekit-builder` and `sourcekit:301` images
+- **[recommended]** Build `sourcekit-builder` and `sourcekit:302p1` images
 - Build in the Docker Container placing source into Shared Volume  
   This method is intended to using workflow on tweaking Swift build.
 
-  ### Build `sourcekit-builder` and `sourcekit:301` images
+  ### Build `sourcekit-builder` and `sourcekit:302p1` images
 ```sh
 # Build `sourcekit-builder` image
-$ docker build -t sourcekit-builder:301 https://github.com/norio-nomura/docker-sourcekit-builder.git
+$ docker build -t sourcekit-builder:302p1 https://github.com/norio-nomura/docker-sourcekit-builder.git
 # Build `sourcekit` image using context created by `sourcekit-builder`
-$ docker run --rm sourcekit-builder:301 context | docker build -t sourcekit:301 -
+$ docker run --rm sourcekit-builder:302p1 context | docker build -t sourcekit:302p1 -
 ```
 
 ### Build in the Docker Container placing source into Shared Volume
@@ -41,9 +41,9 @@ $ ./build-sourcekit-sv.sh
 **Docker for Mac has some issues on using shared volume that causes errors or stop on building Swift.**  
 See [Setup `docker-machine` on Mac](docker-machine-on-mac.md).
 
-## Build `SourceKitten` using `sourcekit:301` image
+## Build `SourceKitten` using `sourcekit:302p1` image
 ```sh
-$ docker run -it -v `pwd`:`pwd` -w `pwd`/SourceKitten sourcekit:301 bash
+$ docker run -it -v `pwd`:`pwd` -w `pwd`/SourceKitten sourcekit:302p1 bash
 > $ swift build
 > $ swift test
 ```
