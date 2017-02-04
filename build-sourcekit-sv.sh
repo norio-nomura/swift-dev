@@ -21,18 +21,18 @@ DOCKER_RUN_OPTIONS="-it -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR} --rm"
 SOURCEKIT_IMAGE="sourcekit:sv"
 REVISION="`git rev-parse --short HEAD|tr -d '\n'`"
 SRC_DIR=${WORK_DIR}/swift
-TOOLCHAIN_VERSION="swift-3.0.2-RELEASE-${REVISION}-with-sourcekit"
+TOOLCHAIN_VERSION="swift-3.1-DEVELOPMENT-SNAPSHOT-${REVISION}-with-sourcekit"
 ARCHIVE="${TOOLCHAIN_VERSION}.tar.gz"
 SWIFT_INSTALLABLE_PACKAGE="${WORK_DIR}/build/${ARCHIVE}"
 SWIFT_INSTALL_DIR="${WORK_DIR}/build/swift-nightly-install"
 
 if [ ! -f "${SWIFT_INSTALLABLE_PACKAGE}" ]; then
   # Build Swift With libdispatch
-  docker run ${DOCKER_RUN_OPTIONS} ${BUILD_BASE_IMAGE} \
-    swift/utils/build-script \
-      --preset-file="${WORK_DIR}/build-presets-for-sourcekit-linux.ini" \
-      --preset="buildbot_linux_libdispatch" \
-      install_destdir="${SWIFT_INSTALL_DIR}" || exit 1
+  # docker run ${DOCKER_RUN_OPTIONS} ${BUILD_BASE_IMAGE} \
+  #   swift/utils/build-script \
+  #     --preset-file="${WORK_DIR}/build-presets-for-sourcekit-linux.ini" \
+  #     --preset="buildbot_linux_libdispatch" \
+  #     install_destdir="${SWIFT_INSTALL_DIR}" || exit 1
 
   # Build Normal Swift Toolchain & SourceKit
   docker run ${DOCKER_RUN_OPTIONS} ${BUILD_BASE_IMAGE} \
