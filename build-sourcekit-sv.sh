@@ -58,6 +58,7 @@ if [ -z "`docker images -q ${SOURCEKIT_IMAGE}|tr -d '\n'`" ]; then
   cat <<-EOF >${DOCKER_BUILD_DIR}/Dockerfile
   FROM ${BASE_IMAGE}
   ADD ${ARCHIVE} /
+  RUN ln -sf /usr/lib/sourcekitdInProc.framework/sourcekitdInProc /usr/lib/libsourcekitdInProc.so
 EOF
   docker build -t ${SOURCEKIT_IMAGE} ${DOCKER_BUILD_DIR} || exit 1
 
