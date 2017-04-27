@@ -21,7 +21,7 @@ DOCKER_RUN_OPTIONS="-it -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR} --rm"
 SOURCEKIT_IMAGE="sourcekit:sv"
 REVISION="`git rev-parse --short HEAD|tr -d '\n'`"
 SRC_DIR=${WORK_DIR}/swift
-TOOLCHAIN_VERSION="swift-3.1-RELEASE-${REVISION}-with-sourcekit"
+TOOLCHAIN_VERSION="swift-3.1.1-RELEASE-${REVISION}-with-sourcekit"
 ARCHIVE="${TOOLCHAIN_VERSION}.tar.gz"
 SWIFT_INSTALLABLE_PACKAGE="${WORK_DIR}/build/${ARCHIVE}"
 SWIFT_INSTALL_DIR="${WORK_DIR}/build/swift-nightly-install"
@@ -58,7 +58,6 @@ if [ -z "`docker images -q ${SOURCEKIT_IMAGE}|tr -d '\n'`" ]; then
   cat <<-EOF >${DOCKER_BUILD_DIR}/Dockerfile
   FROM ${BASE_IMAGE}
   ADD ${ARCHIVE} /
-  RUN ln -sf /usr/lib/sourcekitdInProc.framework/sourcekitdInProc /usr/lib/libsourcekitdInProc.so
 EOF
   docker build -t ${SOURCEKIT_IMAGE} ${DOCKER_BUILD_DIR} || exit 1
 
